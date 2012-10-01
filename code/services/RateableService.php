@@ -41,4 +41,21 @@ class RateableService{
 			'ObjectID' => $id
 		));
 	}
+
+
+	/**
+	 * takes a DataList of Rateable DataObjects and sorts them by their average score 
+	 * @param DataList $list
+	 * @return DataList
+	 **/
+	public function sortByRating(DataList $list){
+		$items = new ArrayList($list->toArray());
+		foreach ($items as $item) {
+			$score = $item->getAverageScore();
+			$item->Score = $score ? $score : 0;
+			$item->Title = $item->Title . ' ' . $item->Score;
+		}
+
+		return $items->sort('Score', 'DESC');
+	}
 }
