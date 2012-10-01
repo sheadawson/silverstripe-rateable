@@ -46,7 +46,7 @@ class RateableService{
 	/**
 	 * takes a DataList of Rateable DataObjects and sorts them by their average score 
 	 * @param DataList $list
-	 * @return DataList
+	 * @return ArrayList
 	 **/
 	public function sortByRating(DataList $list){
 		$items = new ArrayList($list->toArray());
