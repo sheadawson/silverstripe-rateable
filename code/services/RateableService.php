@@ -53,7 +53,7 @@ class RateableService{
 		foreach ($items as $item) {
 			$score = $item->getAverageScore();
 			$item->Score = $score ? $score : 0;
-			$item->Title = $item->Title . ' ' . $item->Score;
+			$item->Title = $item->Title;
 		}
 
 		return $items->sort('Score', $dir);
