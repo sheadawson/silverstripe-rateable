@@ -48,7 +48,7 @@ class RateableService{
 	 * @param DataList $list
 	 * @return ArrayList
 	 **/
-	public function sortByRating(DataList $list){
+	public function sortByRating(DataList $list, $dir = 'DESC'){
 		$items = new ArrayList($list->toArray());
 		foreach ($items as $item) {
 			$score = $item->getAverageScore();
@@ -56,6 +56,6 @@ class RateableService{
 			$item->Title = $item->Title . ' ' . $item->Score;
 		}
 
-		return $items->sort('Score', 'DESC');
+		return $items->sort('Score', $dir);
 	}
 }
