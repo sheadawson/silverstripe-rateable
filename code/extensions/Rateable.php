@@ -42,6 +42,7 @@ class Rateable extends DataExtension {
 	public function RateableUI(){
 		Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
 		Requirements::javascript(RATEABLE_MODULE . '/javascript/jquery.raty.js');
+		Requirements::customScript($this->owner->renderWith('RateableJS'));
 		return $this->owner->renderWith('RateableUI');
 	}
 
