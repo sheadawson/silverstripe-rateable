@@ -5,6 +5,16 @@
  */
 class Rateable extends DataExtension {
 
+	public static $db = array(
+		'EnableRatings' => 'Boolean'
+	);
+
+
+	public static $defauls = array(
+		'EnableRatings' => 1
+	);
+
+
 	public static $dependencies = array(
 		'rateableService'	=> '%$RateableService',
 	);
@@ -14,6 +24,11 @@ class Rateable extends DataExtension {
 	 * @var RateableService
 	 */
 	public $rateableService;
+
+
+	public function updateSettingsFields($fields){
+		$fields->addFieldToTab('Root.Settings', new CheckboxField('EnableRatings', 'Enable Ratings'));
+	}
 
 
 	/**
@@ -40,6 +55,8 @@ class Rateable extends DataExtension {
 	 * @return String
 	 **/
 	public function RateableUI(){
+		if(!$this->owner->EnableRatings) return;
+
 		Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
 		Requirements::javascript(RATEABLE_MODULE . '/javascript/jquery.raty.js');
 		Requirements::customScript($this->owner->renderWith('RateableJS'));

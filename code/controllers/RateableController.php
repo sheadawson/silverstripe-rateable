@@ -39,7 +39,7 @@ class RateableController extends Controller {
 		}
 
 		// check the object exists
-		if(!$class::get()->byID($id)){
+		if(!$object && !$object->EnableRatings){
 			return Convert::raw2json(array(
 				'status' => 'error',
 				'message' => 'Sorry, the item you are trying to rate could not be found'

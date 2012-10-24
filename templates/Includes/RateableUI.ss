@@ -1,1 +1,1 @@
-<div id="$RatingHTMLID"></div>
+<div id="$RatingHTMLID" class='rateable-ui'></div>
