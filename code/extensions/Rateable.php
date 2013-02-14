@@ -10,7 +10,7 @@ class Rateable extends DataExtension {
 	);
 
 
-	public static $defauls = array(
+	public static $defaults = array(
 		'EnableRatings' => 1
 	);
 
