@@ -5,17 +5,17 @@
  */
 class Rateable extends DataExtension {
 
-	public static $db = array(
+	private static $db = array(
 		'EnableRatings' => 'Boolean'
 	);
 
 
-	public static $defaults = array(
+	private static $defaults = array(
 		'EnableRatings' => 1
 	);
 
 
-	public static $dependencies = array(
+	private static $dependencies = array(
 		'rateableService'	=> '%$RateableService',
 	);
 
@@ -26,8 +26,15 @@ class Rateable extends DataExtension {
 	public $rateableService;
 
 
-	public function updateSettingsFields($fields){
+	public function updateSettingsFields(FieldList $fields){
 		$fields->addFieldToTab('Root.Settings', new CheckboxField('EnableRatings', 'Enable Ratings'));
+	}
+
+
+	public function updateCMSFields(FieldList $fields){
+		if(!is_subclass_of($this->owner, 'SiteTree')){
+			$fields->addFieldToTab('Root.Main', new CheckboxField('EnableRatings', 'Enable Ratings'));	
+		}
 	}
 
 

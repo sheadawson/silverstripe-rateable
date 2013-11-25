@@ -5,14 +5,14 @@
  */
 class Rating extends DataObject {
 	
-	static $db = array(
+	private static $db = array(
 		'Score' 		=> 'Int',	
 		'ObjectID' 		=> 'Int',	
 		'ObjectClass' 	=> 'Varchar',
 		'SessionID' 	=> 'Varchar(255)'	
 	);
 
-	static $has_one = array(
+	private static $has_one = array(
 		'Member' => 'Member'
 	);
 

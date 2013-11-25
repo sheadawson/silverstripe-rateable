@@ -7,7 +7,7 @@ class RateableController extends Controller {
 	
 	const URLSegment = 'rateable';
 
-	public static $dependencies = array(
+	private static $dependencies = array(
 		'rateableService'	=> '%$RateableService',
 	);
 	
