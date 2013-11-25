@@ -1,0 +1,22 @@
+{
+	"name": "sheadawson/silverstripe-rateable",
+	"description": "An extension that adds a star rating system + UI to any DataObject type.",
+	"type": "silverstripe-module",
+	"keywords": ["silverstripe", "rating"],
+	"homepage": "http://github.com/sheadawson/silverstripe-rateable",
+	"authors": [
+	{
+		"name": "Shea Dawson",
+		"email": "shea@silverstripe.com.au"
+	}
+	],
+	"require":
+	{
+		"composer/installers": "*",
+		"silverstripe/framework": "3.1.*",
+		"silverstripe/cms": "3.1.*"
+	},
+	"extra": {
+		"installer-name": "rateable"
+	}
+}
