@@ -9,7 +9,7 @@ Silverstripe 3.1
 
 ## Installation
 
-composer require sheadawson/silverstripe-ratable dev-master
+composer require sheadawson/silverstripe-rateable dev-master
 
 Apply the Rateable DataExtension to the Objects you want to rate. ie. in mysite/_config/config.yml
 
