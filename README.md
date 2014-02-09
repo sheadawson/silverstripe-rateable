@@ -21,3 +21,10 @@ Then in your templates you can use $RateableUI, when in the context of your rate
 
 Run dev/build?flush=all
 
+## Sorting objects by rating 
+
+```php
+$pages = Page::get();
+$sortedPages = singleton('RateableService')->sortByRating($pages);
+```
+
