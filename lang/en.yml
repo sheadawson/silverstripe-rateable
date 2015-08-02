@@ -1,0 +1,16 @@
+en:
+  RateableController:
+    ERRORALREADYRATED: 'Sorry, You have already rated this item'
+    ERRORMESSAGE: 'Sorry, there was an error rating this item'
+    ERRORNOTFOUNT: 'Sorry, the item you are trying to rate could not be found'
+    THANKYOUMESSAGE: 'Thanks for rating!'
+  RateableJS:
+    ERRORALREADYRATED: 'You have already rated this item'
+  Rating:
+    PLURALNAME: Ratings
+    SINGULARNAME: Rating
+    db_ObjectClass: 'Object Class'
+    db_ObjectID: 'Object ID'
+    db_Score: Score
+    db_SessionID: 'Session ID'
+    has_one_Member: Member

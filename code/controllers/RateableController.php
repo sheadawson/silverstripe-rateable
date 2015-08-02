@@ -34,7 +34,7 @@ class RateableController extends Controller {
 		if(!class_exists($class) || !$id || !$score || (!$object = $class::get()->byID($id))){
 			return Convert::raw2json(array(
 				'status' => 'error',
-				'message' => 'Sorry, there was an error rating this item'
+				'message' => _t('RateableController.ERRORMESSAGE', 'Sorry, there was an error rating this item')
 			));
 		}
 
@@ -42,7 +42,7 @@ class RateableController extends Controller {
 		if(!$object && !$object->EnableRatings){
 			return Convert::raw2json(array(
 				'status' => 'error',
-				'message' => 'Sorry, the item you are trying to rate could not be found'
+				'message' => _t('RateableController.ERRORNOTFOUNT', 'Sorry, the item you are trying to rate could not be found')
 			));
 		}
 
@@ -50,7 +50,7 @@ class RateableController extends Controller {
 		if($this->rateableService->userHasRated($class, $id)){
 			return Convert::raw2json(array(
 				'status' => 'error',
-				'message' => 'Sorry, You have already rated this item'
+				'message' => _t('RateableController.ERRORALREADYRATED', 'Sorry, You have already rated this item')
 			));
 		}
 
@@ -66,7 +66,7 @@ class RateableController extends Controller {
 		return Convert::raw2json(array(
 			'status' => 'success',
 			'averagescore' => $object->getAverageScore(),
-			'message' => 'Thanks for rating!'
+			'message' => _t('RateableController.THANKYOUMESSAGE', 'Thanks for rating!')
 		));
 	}
 }
