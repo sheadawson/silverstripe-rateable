@@ -48,6 +48,14 @@ class Rateable extends DataExtension {
 
 
 	/**
+	 * gets the number of ratings
+	 * @return int
+	 */
+	public function getNumberOfRatings() {
+		return $this->rateableService->getRatingsFor($this->owner->ClassName, $this->owner->ID)->count();
+	}
+
+	/**
 	 * checks to see if the current user has rated this object
 	 * by checking against the rating SessionID and MemberID
 	 * @return Boolean
