@@ -2,8 +2,8 @@
 	$(function(){
 		var RateableUI = $('#{$RatingHTMLID}');
 		RateableUI.raty({
-			//cancel 		: <% if UserHasRated %>true<% else %>false<% end_if %>,
-			readOnly 	: <% if UserHasRated %>true<% else %>false<% end_if %>,
+			//cancel 		: <% if $UserHasRated %>true<% else %>false<% end_if %>,
+			readOnly 	: <% if $UserHasRated %>true<% else %>false<% end_if %>,
 			score 		: '$AverageScore',
 			path 		: 'rateable/images/'
 		});
@@ -14,7 +14,7 @@
 
 		RateableUI.find('img').not('.raty-cancel').click(function(){
 			if(RateableUI.hasClass('disabled')){
-				alert('You have already rated this item');
+				alert(<%t RateableJS.ERRORALREADYRATED 'You have already rated this item' %>);
 				return;	
 			} 
 			
