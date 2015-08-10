@@ -8,13 +8,13 @@
 			path 		: 'rateable/images/'
 		});
 
-		<% if UserHasRated %>
+		<% if $UserHasRated %>
 			RateableUI.addClass('disabled');
 		<% end_if %>
 
 		RateableUI.find('img').not('.raty-cancel').click(function(){
 			if(RateableUI.hasClass('disabled')){
-				alert(<%t RateableJS.ERRORALREADYRATED 'You have already rated this item' %>);
+				alert("<%t RateableJS.ERRORALREADYRATED 'You have already rated this item' %>");
 				return;	
 			} 
 			
