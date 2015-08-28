@@ -78,7 +78,7 @@ class Rateable extends DataExtension {
 	 * @return String
 	 **/
 	public function RateableUI($htmlIdPostfix = false){
-		if(!$this->owner->EnableRatings) return;
+		if(!$this->owner->checkRatingsEnabled()) return;
 
 		$this->htmlIdPostfix = $htmlIdPostfix;
 
@@ -128,6 +128,15 @@ class Rateable extends DataExtension {
 		}
 
 		return implode(' ', $parts);
+	}
+
+
+	/**
+	 * Checks whether ratings should be enabled on this object
+	 * @return Boolean
+	 **/
+	public function checkRatingsEnabled(){
+		return $this->owner->EnableRatings && $this->owner->ID > 0;
 	}
 	
 
