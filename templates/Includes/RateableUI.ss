@@ -1,1 +1,1 @@
-<div id="$RatingHTMLID" class='rateable-ui'></div>
+<div id="$RatingHTMLID" class="$RatingCSSClass" data-averagescore="$AverageScore" data-ratepath="$RatePath"></div>

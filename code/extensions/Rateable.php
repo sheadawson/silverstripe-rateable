@@ -84,7 +84,8 @@ class Rateable extends DataExtension {
 
 		Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
 		Requirements::javascript(RATEABLE_MODULE . '/javascript/jquery.raty.js');
-		Requirements::customScript($this->owner->renderWith('RateableJS'));
+		Requirements::javascript(RATEABLE_MODULE . '/javascript/rateable.js');
+
 		return $this->owner->renderWith('RateableUI');
 	}
 
@@ -105,6 +106,23 @@ class Rateable extends DataExtension {
 		}
 
 		return implode('-', $parts);
+	}
+
+
+	/**
+	 * returns a string to be used in the RatableUI's css class attribute
+	 * @return String
+	 **/
+	public function getRatingCSSClass(){
+		$parts = array(
+			'rateable-ui'
+		);
+
+		if($this->UserHasRated()){
+			$parts[] = 'disabled';
+		}
+
+		return implode(' ', $parts);
 	}
 	
 
