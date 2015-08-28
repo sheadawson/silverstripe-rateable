@@ -17,7 +17,7 @@ Apply the Rateable DataExtension to the Objects you want to rate. ie. in mysite/
 	  extensions:
 	    - Rateable
 
-Then in your templates you can use $RateableUI, when in the context of your rateable object to render the star rating UI
+Then in your templates you can use $RateableUI, when in the context of your rateable object to render the star rating UI. If you have multiple instances of the same DataObject + RateableUI on one page, you can pass in a unique identifier string to $RateableUI, ie. $RateableUI('footer').
 
 Run dev/build?flush=all
 
@@ -27,4 +27,3 @@ Run dev/build?flush=all
 $pages = Page::get();
 $sortedPages = singleton('RateableService')->sortByRating($pages);
 ```
-

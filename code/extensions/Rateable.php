@@ -26,6 +26,12 @@ class Rateable extends DataExtension {
 	public $rateableService;
 
 
+	/**
+	 * @var String
+	 */
+	private $htmlIdPostfix;
+
+
 	public function updateSettingsFields(FieldList $fields){
 		$fields->addFieldToTab('Root.Settings', new CheckboxField('EnableRatings', 'Enable Ratings'));
 	}
@@ -67,10 +73,14 @@ class Rateable extends DataExtension {
 
 	/**
 	 * returns the JS and HTML required for the star rating UI
+	 * @var $htmlIdPostfix String - appends a given unique identifier to the ratingHTMLID. This allows 
+	 * multiple instances of the same ratable object on one page
 	 * @return String
 	 **/
-	public function RateableUI(){
+	public function RateableUI($htmlIdPostfix = false){
 		if(!$this->owner->EnableRatings) return;
+
+		$this->htmlIdPostfix = $htmlIdPostfix;
 
 		Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
 		Requirements::javascript(RATEABLE_MODULE . '/javascript/jquery.raty.js');
@@ -84,7 +94,17 @@ class Rateable extends DataExtension {
 	 * @return String
 	 **/
 	public function getRatingHTMLID(){
-		return $this->owner->ClassName . '-' . $this->owner->ID . '-' . 'rating';
+		$parts = array(
+			$this->owner->ClassName,
+			$this->owner->ID,
+			'rating'
+		);
+
+		if($this->htmlIdPostfix){
+			$parts[] = $this->htmlIdPostfix;
+		}
+
+		return implode('-', $parts);
 	}
 	
 
