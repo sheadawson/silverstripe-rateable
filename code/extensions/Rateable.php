@@ -85,7 +85,12 @@ class Rateable extends DataExtension {
 		Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
 		Requirements::javascript(RATEABLE_MODULE . '/javascript/jquery.raty.js');
 		Requirements::javascript(RATEABLE_MODULE . '/javascript/rateable.js');
-
+			
+		// just for the default "simple" theme
+		if(Config::inst()->get('SSViewer', 'theme') == 'simple'){
+			Requirements::css(RATEABLE_MODULE . '/css/rateable.css');	
+		}
+		
 		return $this->owner->renderWith('RateableUI');
 	}
 
