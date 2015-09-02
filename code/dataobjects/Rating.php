@@ -18,6 +18,11 @@ class Rating extends DataObject {
 
 	public function onBeforeWrite(){
 		parent::onBeforeWrite();
+
+		if(!session_id()){
+			Session::inst_start();
+		}
+		
 		$this->MemberID = Member::currentUserID();
 		$this->SessionID = session_id();
 	}
