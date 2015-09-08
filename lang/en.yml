@@ -6,6 +6,8 @@ en:
     THANKYOUMESSAGE: 'Thanks for rating!'
   RateableJS:
     ERRORALREADYRATED: 'You have already rated this item'
+  Rateable:
+    db_EnableRatings: 'Enable Ratings'
   Rating:
     PLURALNAME: Ratings
     SINGULARNAME: Rating

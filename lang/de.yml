@@ -5,7 +5,9 @@ de:
     ERRORNOTFOUNT: 'Entschuldigung, das Objekt zum Bewerten wurde nicht gefunden'
     THANKYOUMESSAGE: 'Danke f&amp;uuml;r die Bewertung!'
   RateableJS:
-    ERRORALREADYRATED: 'You have already rated this item'
+    ERRORALREADYRATED: 'Entschuldigung, Sie haben das schon bewertet'
+  Rateable:
+    db_EnableRatings: 'Bewertung (Sterne) anzeigen'
   Rating:
     PLURALNAME: Bewertungen
     SINGULARNAME: Bewertung
