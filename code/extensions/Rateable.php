@@ -33,13 +33,13 @@ class Rateable extends DataExtension {
 
 
 	public function updateSettingsFields(FieldList $fields){
-		$fields->addFieldToTab('Root.Settings', new CheckboxField('EnableRatings', 'Enable Ratings'));
+		$fields->addFieldToTab('Root.Settings', new CheckboxField('EnableRatings', _t('Rateable.db_EnableRatings', 'Enable Ratings')));
 	}
 
 
 	public function updateCMSFields(FieldList $fields){
 		if(!is_subclass_of($this->owner, 'SiteTree')){
-			$fields->addFieldToTab('Root.Main', new CheckboxField('EnableRatings', 'Enable Ratings'));	
+			$fields->addFieldToTab('Root.Main', new CheckboxField('EnableRatings', _t('Rateable.db_EnableRatings', 'Enable Ratings')));
 		}
 	}
 
