@@ -136,7 +136,7 @@ class Rateable extends DataExtension {
 	 * @return Boolean
 	 **/
 	public function checkRatingsEnabled(){
-		return $this->owner->EnableRatings && $this->owner->ID > 0;
+		return $this->owner->EnableRatings && $this->owner->ID > 0 && $this->owner->ClassName != 'ErrorPage';
 	}
 	
 
