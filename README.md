@@ -29,3 +29,12 @@ Run dev/build?flush=all
 $pages = Page::get();
 $sortedPages = singleton('RateableService')->sortByRating($pages);
 ```
+## Disabling by default on some page types
+
+If you have added this extension to the `Page` class, it's enabled by default on *all* pages. But on some page types this might be annoying, e.g. ErrorPage or some holders. You can disable $RateableUI by default on this pages by adding this to your config.yml:
+
+	ErrorPage:
+	  defaults:	
+	    EnableRatings: 0
+	    
+You can still enable it on some pages of this type by hand in the "Settings" section.
