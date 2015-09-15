@@ -20,7 +20,7 @@ class Rating extends DataObject {
 		parent::onBeforeWrite();
 
 		if(!session_id()){
-			Session::inst_start();
+			Session::start();
 		}
 		
 		$this->MemberID = Member::currentUserID();
