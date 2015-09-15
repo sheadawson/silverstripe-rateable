@@ -3,7 +3,7 @@ de:
     ERRORALREADYRATED: 'Entschuldigung, Sie haben das schon bewertet'
     ERRORMESSAGE: 'Entschuldigung, beim Bewerten trat ein Fehler auf'
     ERRORNOTFOUNT: 'Entschuldigung, das Objekt zum Bewerten wurde nicht gefunden'
-    THANKYOUMESSAGE: 'Danke f&amp;uuml;r die Bewertung!'
+    THANKYOUMESSAGE: 'Danke f&uuml;r die Bewertung!'
   RateableJS:
     ERRORALREADYRATED: 'Entschuldigung, Sie haben das schon bewertet'
   Rateable:
