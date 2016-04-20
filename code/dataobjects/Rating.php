@@ -3,27 +3,29 @@
  * @author Shea Dawson <shea@silverstripe.com.au>
  * @license BSD http://silverstripe.org/BSD-license
  */
-class Rating extends DataObject {
-	
-	private static $db = array(
-		'Score' 		=> 'Int',	
-		'ObjectID' 		=> 'Int',	
-		'ObjectClass' 	=> 'Varchar',
-		'SessionID' 	=> 'Varchar(255)'	
-	);
+class Rating extends DataObject
+{
+    
+    private static $db = array(
+        'Score'        => 'Int',
+        'ObjectID'        => 'Int',
+        'ObjectClass'    => 'Varchar',
+        'SessionID'    => 'Varchar(255)'
+    );
 
-	private static $has_one = array(
-		'Member' => 'Member'
-	);
+    private static $has_one = array(
+        'Member' => 'Member'
+    );
 
-	public function onBeforeWrite(){
-		parent::onBeforeWrite();
+    public function onBeforeWrite()
+    {
+        parent::onBeforeWrite();
 
-		if(!session_id()){
-			Session::start();
-		}
-		
-		$this->MemberID = Member::currentUserID();
-		$this->SessionID = session_id();
-	}
+        if (!session_id()) {
+            Session::start();
+        }
+        
+        $this->MemberID = Member::currentUserID();
+        $this->SessionID = session_id();
+    }
 }

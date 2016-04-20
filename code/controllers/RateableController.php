@@ -3,70 +3,72 @@
  * @author Shea Dawson <shea@silverstripe.com.au>
  * @license BSD http://silverstripe.org/BSD-license
  */
-class RateableController extends Controller {
-	
-	const URLSegment = 'rateable';
+class RateableController extends Controller
+{
+    
+    const URLSegment = 'rateable';
 
-	private static $dependencies = array(
-		'rateableService'	=> '%$RateableService',
-	);
-	
-	public static $allowed_actions = array(
-		'rate'
-	);
+    private static $dependencies = array(
+        'rateableService'    => '%$RateableService',
+    );
+    
+    public static $allowed_actions = array(
+        'rate'
+    );
 
-	/**
-	 * @var RateableService
-	 */
-	public $rateableService;
+    /**
+     * @var RateableService
+     */
+    public $rateableService;
 
 
-	/**
-	 * action for rating an object
-	 * @return JSON
-	 **/
-	public function rate($request){
-		$class 	= $request->param('ObjectClassName');
-		$id 	= (int)$request->param('ObjectID');
-		$score	= (int)$request->getVar('score');
+    /**
+     * action for rating an object
+     * @return JSON
+     **/
+    public function rate($request)
+    {
+        $class    = $request->param('ObjectClassName');
+        $id    = (int)$request->param('ObjectID');
+        $score    = (int)$request->getVar('score');
 
-		// check we have all the params
-		if(!class_exists($class) || !$id || !$score || (!$object = $class::get()->byID($id))){
-			return Convert::raw2json(array(
-				'status' => 'error',
-				'message' => _t('RateableController.ERRORMESSAGE', 'Sorry, there was an error rating this item')
-			));
-		}
+        // check we have all the params
+        if (!class_exists($class) || !$id || !$score || (!$object = $class::get()->byID($id))) {
+            return Convert::raw2json(array(
+                'status' => 'error',
+                'message' => _t('RateableController.ERRORMESSAGE', 'Sorry, there was an error rating this item')
+            ));
+        }
 
-		// check the object exists
-		if(!$object && !$object->checkRatingsEnabled()){
-			return Convert::raw2json(array(
-				'status' => 'error',
-				'message' => _t('RateableController.ERRORNOTFOUNT', 'Sorry, the item you are trying to rate could not be found')
-			));
-		}
+        // check the object exists
+        if (!$object && !$object->checkRatingsEnabled()) {
+            return Convert::raw2json(array(
+                'status' => 'error',
+                'message' => _t('RateableController.ERRORNOTFOUNT', 'Sorry, the item you are trying to rate could not be found')
+            ));
+        }
 
-		// check the user can rate the object
-		if($this->rateableService->userHasRated($class, $id)){
-			return Convert::raw2json(array(
-				'status' => 'error',
-				'message' => _t('RateableController.ERRORALREADYRATED', 'Sorry, You have already rated this item')
-			));
-		}
+        // check the user can rate the object
+        if ($this->rateableService->userHasRated($class, $id)) {
+            return Convert::raw2json(array(
+                'status' => 'error',
+                'message' => _t('RateableController.ERRORALREADYRATED', 'Sorry, You have already rated this item')
+            ));
+        }
 
-		// create the rating
-		$rating = Rating::create(array(
-			'Score' 		=> $score,	
-			'ObjectID' 		=> $id,	
-			'ObjectClass' 	=> $class
-		));
-		$rating->write();
+        // create the rating
+        $rating = Rating::create(array(
+            'Score'        => $score,
+            'ObjectID'        => $id,
+            'ObjectClass'    => $class
+        ));
+        $rating->write();
 
-		// success
-		return Convert::raw2json(array(
-			'status' => 'success',
-			'averagescore' => $object->getAverageScore(),
-			'message' => _t('RateableController.THANKYOUMESSAGE', 'Thanks for rating!')
-		));
-	}
+        // success
+        return Convert::raw2json(array(
+            'status' => 'success',
+            'averagescore' => $object->getAverageScore(),
+            'message' => _t('RateableController.THANKYOUMESSAGE', 'Thanks for rating!')
+        ));
+    }
 }
