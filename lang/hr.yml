@@ -1,0 +1,18 @@
+hr:
+  RateableController:
+    ERRORALREADYRATED: 'Nažalost, već ste ocjenili ovu stavku'
+    ERRORMESSAGE: 'Nažalost, dogodila se greška prilikom ocjenjivanja'
+    ERRORNOTFOUNT: 'Nažalost, stavka koju pokušavate ocjeniti ne postoji'
+    THANKYOUMESSAGE: 'Hvala na ocjeni!'
+  RateableJS:
+    ERRORALREADYRATED: 'You have already rated this item'
+  Rateable:
+    db_EnableRatings: 'Omogući glasanje'
+  Rating:
+    PLURALNAME: Ocjene
+    SINGULARNAME: Ocjena
+    db_ObjectClass: 'Klasa objekta'
+    db_ObjectID: 'ID objekta'
+    db_Score: Ocjena
+    db_SessionID: 'ID sesije'
+    has_one_Member: Član
