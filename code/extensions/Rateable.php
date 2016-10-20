@@ -5,47 +5,76 @@
  */
 class Rateable extends DataExtension
 {
-
-    private static $db = array(
-        'EnableRatings' => 'Boolean'
-    );
-
-
-    private static $defaults = array(
-        'EnableRatings' => 1
-    );
-
-
     private static $dependencies = array(
         'rateableService'    => '%$RateableService',
     );
 
+    /**
+     * Templates to render with.
+     *
+     * @var array
+     */
+    private static $rateable_templates = array();
+
+    /**
+     * The maximum score a user can rate this item
+     *
+     * @var array
+     */
+    private static $rateable_rating_max = 5;
+
+    /**
+     * If true, rateable will always be turned on regardless of 'EnableRatings'.
+     * The field will also no longer be available in the CMS as it's made redundant.
+     *
+     * @var boolean
+     */
+    private static $rateable_config_enabled = false;
+
+    /**
+     * If true, the user can change their rating at any time.
+     *
+     * @var boolean
+     */
+    private static $rateable_can_change_rating = false;
     
     /**
      * @var RateableService
      */
     public $rateableService;
 
-
     /**
      * @var String
      */
     private $htmlIdPostfix;
 
+    /** 
+     * Setting up DB / has_one / defaults with "get_extra_config" allows you to extend
+     * an extension class without breaking the $db configs.
+     *
+     * @return array
+     */
+    public static function get_extra_config($class, $extension, $args) {
+        return array(
+            'db' => array('EnableRatings' => 'Boolean'),
+            'defaults' => array('EnableRatings' => '1'),
+        );
+    }
 
     public function updateSettingsFields(FieldList $fields)
     {
-        $fields->addFieldToTab('Root.Settings', new CheckboxField('EnableRatings', _t('Rateable.db_EnableRatings', 'Enable Ratings')));
+        if (!$this->owner->config()->rateable_config_enabled) {
+            $fields->addFieldToTab('Root.Settings', CheckboxField::create('EnableRatings', _t('Rateable.db_EnableRatings', 'Enable Ratings')));
+        }
     }
 
 
     public function updateCMSFields(FieldList $fields)
     {
-        if (!is_subclass_of($this->owner, 'SiteTree')) {
-            $fields->addFieldToTab('Root.Main', new CheckboxField('EnableRatings', _t('Rateable.db_EnableRatings', 'Enable Ratings')));
+        if (!is_subclass_of($this->owner, 'SiteTree') && !$this->owner->config()->rateable_config_enabled) {
+            $fields->addFieldToTab('Root.Main', CheckboxField::create('EnableRatings', _t('Rateable.db_EnableRatings', 'Enable Ratings')));
         }
     }
-
 
     /**
      * gets the average rating score
@@ -56,6 +85,25 @@ class Rateable extends DataExtension
         return $this->rateableService->getRatingsFor($this->owner->ClassName, $this->owner->ID)->avg('Score');
     }
 
+    /**
+     * Get the available ratings.
+     *
+     * @return ArrayList
+     */
+    public function getRatingOptions()
+    {
+        $averageScoreRoundedUp = ceil($this->getAverageScore());
+        $maxRating = $this->owner->getMaxRating();
+
+        $result = array();
+        for ($i = 1; $i <= $maxRating; ++$i) {
+            $result[] = new ArrayData(array(
+                'Score'    => (int)$i,
+                'IsAverageScore' => ($i <= $averageScoreRoundedUp)
+            ));
+        }
+        return new ArrayList($result);
+    }
 
     /**
      * gets the number of ratings
@@ -63,7 +111,17 @@ class Rateable extends DataExtension
      */
     public function getNumberOfRatings()
     {
-        return $this->rateableService->getRatingsFor($this->owner->ClassName, $this->owner->ID)->count();
+        return (int)$this->rateableService->getRatingsFor($this->owner->ClassName, $this->owner->ID)->count();
+    }
+
+    /**
+     * Get the maximum rating
+     *
+     * @return int
+     */
+    public function getMaxRating() 
+    {
+        return $this->owner->config()->rateable_rating_max;
     }
 
     /**
@@ -75,7 +133,6 @@ class Rateable extends DataExtension
     {
         return $this->rateableService->userHasRated($this->owner->ClassName, $this->owner->ID);
     }
-
 
     /**
      * returns the JS and HTML required for the star rating UI
@@ -92,15 +149,12 @@ class Rateable extends DataExtension
         $this->htmlIdPostfix = $htmlIdPostfix;
 
         Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
-        Requirements::javascript(RATEABLE_MODULE . '/javascript/jquery.raty.js');
-        Requirements::javascript(RATEABLE_MODULE . '/javascript/rateable.js');
-            
-        // just for the default "simple" theme
-        if (Config::inst()->get('SSViewer', 'theme') == 'simple') {
-            Requirements::css(RATEABLE_MODULE . '/css/rateable.css');
-        }
-        
-        return $this->owner->renderWith('RateableUI');
+        Requirements::javascript(RATEABLE_MODULE . '/javascript/rateable.min.js');
+        Requirements::css(RATEABLE_MODULE . '/css/rateable.min.css');
+    
+        $templates = $this->owner->stat('rateable_templates');
+        $templates[] = 'RateableUI';
+        return $this->owner->renderWith($templates);
     }
 
 
@@ -135,7 +189,7 @@ class Rateable extends DataExtension
         );
 
         if ($this->UserHasRated()) {
-            $parts[] = 'disabled';
+            $parts[] = 'has-voted';
         }
 
         return implode(' ', $parts);
@@ -148,9 +202,18 @@ class Rateable extends DataExtension
      **/
     public function checkRatingsEnabled()
     {
-        return $this->owner->EnableRatings && $this->owner->ID > 0 && $this->owner->ClassName != 'ErrorPage';
+        $enableRatings = ($this->owner->EnableRatings || $this->owner->config()->rateable_config_enabled);
+        return $enableRatings && $this->owner->exists() && $this->owner->ClassName != 'ErrorPage';
     }
     
+    /**
+     * Check whether the user can take back a rating or not.
+     *
+     * @return boolean
+     */
+    public function canChangeRating() {
+        return (int)$this->owner->config()->rateable_can_change_rating;
+    }
 
     /**
      * return the url path for rating this object

@@ -12,7 +12,7 @@ class RateableController extends Controller
         'rateableService'    => '%$RateableService',
     );
     
-    public static $allowed_actions = array(
+    private static $allowed_actions = array(
         'rate'
     );
 
@@ -41,7 +41,7 @@ class RateableController extends Controller
         }
 
         // check the object exists
-        if (!$object && !$object->checkRatingsEnabled()) {
+        if (!$object || !$object->checkRatingsEnabled()) {
             return Convert::raw2json(array(
                 'status' => 'error',
                 'message' => _t('RateableController.ERRORNOTFOUNT', 'Sorry, the item you are trying to rate could not be found')
@@ -49,26 +49,65 @@ class RateableController extends Controller
         }
 
         // check the user can rate the object
-        if ($this->rateableService->userHasRated($class, $id)) {
+        $ratingRecord = $this->rateableService->userGetRating($class, $id);
+        if ($ratingRecord) {
+            if (!$object->canChangeRating()) {
+                return Convert::raw2json(array(
+                    'status' => 'error',
+                    'message' => _t('RateableController.ERRORALREADYRATED', 'Sorry, You have already rated this item')
+                ));
+            }
+
+            // If clicked same score as before, remove rating
+            if ($score == $ratingRecord->Score)
+            {
+                // Remove rating
+                $ratingRecord->delete();
+
+                // Success
+                return Convert::raw2json(array(
+                    'status' => 'success',
+                    'isremovingrating' => 1,
+                    'averagescore' => $object->getAverageScore(),
+                    'numberofratings' => $object->getNumberOfRatings(),
+                    'message' => _t('RateableController.RATINGREMOVED', 'Your rating has been removed!')
+                ));
+            }
+        }
+
+        // check if score is valid
+        $isScoreValid = false;
+        $scoreOptions = $object->getRatingOptions();
+        if ($scoreOptions) {
+            foreach ($scoreOptions as $scoreOption) {
+                $isScoreValid = ($isScoreValid || ($score == $scoreOption->Score));
+            }
+        }
+        if (!$isScoreValid) {
             return Convert::raw2json(array(
                 'status' => 'error',
-                'message' => _t('RateableController.ERRORALREADYRATED', 'Sorry, You have already rated this item')
+                'message' => _t('RateableController.ERRORINVALIDRATING', 'You sent an invalid rating.')
             ));
         }
 
         // create the rating
-        $rating = Rating::create(array(
-            'Score'        => $score,
-            'ObjectID'        => $id,
-            'ObjectClass'    => $class
-        ));
-        $rating->write();
+        $isRatingNew = (!$ratingRecord);
+        if (!$ratingRecord) {
+            $ratingRecord = Rating::create(array(
+                'ObjectID'        => $id,
+                'ObjectClass'    => $class
+            ));
+        }
+        $ratingRecord->Score = $score;
+        $ratingRecord->write();
 
         // success
         return Convert::raw2json(array(
             'status' => 'success',
+            'isnew'  => $isRatingNew,
             'averagescore' => $object->getAverageScore(),
-            'message' => _t('RateableController.THANKYOUMESSAGE', 'Thanks for rating!')
+            'numberofratings' => $object->getNumberOfRatings(),
+            'message' => ($isRatingNew) ? _t('RateableController.THANKYOUMESSAGE', 'Thanks for rating!') :  _t('RateableController.CHANGEMESSAGE', 'Your rating has been changed!')
         ));
     }
 }
