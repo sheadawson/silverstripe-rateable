@@ -1,0 +1,6 @@
+---
+Name: rateable-config
+---
+SilverStripe\Core\Injector\Injector:
+  RateableService:
+    class: SheaDawson\Rateable\Services\RateableService

@@ -1,14 +1,12 @@
 hr:
-  RateableController:
+  SheaDawson\Rateable\Controllers\RateableController:
     ERRORALREADYRATED: 'Nažalost, već ste ocjenili ovu stavku'
     ERRORMESSAGE: 'Nažalost, dogodila se greška prilikom ocjenjivanja'
     ERRORNOTFOUNT: 'Nažalost, stavka koju pokušavate ocjeniti ne postoji'
     THANKYOUMESSAGE: 'Hvala na ocjeni!'
-  RateableJS:
-    ERRORALREADYRATED: 'You have already rated this item'
-  Rateable:
+  SheaDawson\Rateable\Extensions\Rateable:
     db_EnableRatings: 'Omogući glasanje'
-  Rating:
+  SheaDawson\Rateable\Model\Rating:
     PLURALNAME: Ocjene
     SINGULARNAME: Ocjena
     db_ObjectClass: 'Klasa objekta'

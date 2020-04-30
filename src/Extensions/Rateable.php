@@ -1,4 +1,21 @@
 <?php
+
+namespace SheaDawson\Rateable\Extensions;
+
+use SheaDawson\Rateable\Controllers\RateableController;
+use SheaDawson\Rateable\Services\RateableService;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Control\Controller;
+use SilverStripe\ErrorPage\ErrorPage;
+use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\FieldType\DBBoolean;
+use SilverStripe\View\ArrayData;
+use SilverStripe\View\Requirements;
+use SilverStripe\Core\Convert;
+
 /**
  * @author Shea Dawson <shea@silverstripe.com.au>
  * @license BSD http://silverstripe.org/BSD-license
@@ -37,7 +54,7 @@ class Rateable extends DataExtension
      * @var boolean
      */
     private static $rateable_can_change_rating = false;
-    
+
     /**
      * @var RateableService
      */
@@ -48,7 +65,7 @@ class Rateable extends DataExtension
      */
     private $htmlIdPostfix;
 
-    /** 
+    /**
      * Setting up DB / has_one / defaults with "get_extra_config" allows you to extend
      * an extension class without breaking the $db configs.
      *
@@ -56,7 +73,7 @@ class Rateable extends DataExtension
      */
     public static function get_extra_config($class, $extension, $args) {
         return array(
-            'db' => array('EnableRatings' => 'Boolean'),
+            'db' => array('EnableRatings' => DBBoolean::class),
             'defaults' => array('EnableRatings' => '1'),
         );
     }
@@ -71,7 +88,7 @@ class Rateable extends DataExtension
 
     public function updateCMSFields(FieldList $fields)
     {
-        if (!is_subclass_of($this->owner, 'SiteTree') && !$this->owner->config()->rateable_config_enabled) {
+        if (!is_subclass_of($this->owner, SiteTree::class) && !$this->owner->config()->rateable_config_enabled) {
             $fields->addFieldToTab('Root.Main', CheckboxField::create('EnableRatings', _t('Rateable.db_EnableRatings', 'Enable Ratings')));
         }
     }
@@ -119,7 +136,7 @@ class Rateable extends DataExtension
      *
      * @return int
      */
-    public function getMaxRating() 
+    public function getMaxRating()
     {
         return $this->owner->config()->rateable_rating_max;
     }
@@ -136,7 +153,7 @@ class Rateable extends DataExtension
 
     /**
      * returns the JS and HTML required for the star rating UI
-     * @var $htmlIdPostfix String - appends a given unique identifier to the ratingHTMLID. This allows 
+     * @var $htmlIdPostfix String - appends a given unique identifier to the ratingHTMLID. This allows
      * multiple instances of the same ratable object on one page
      * @return String
      **/
@@ -148,12 +165,11 @@ class Rateable extends DataExtension
 
         $this->htmlIdPostfix = $htmlIdPostfix;
 
-        Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
-        Requirements::javascript(RATEABLE_MODULE . '/javascript/rateable.min.js');
-        Requirements::css(RATEABLE_MODULE . '/css/rateable.min.css');
-    
+        Requirements::javascript('sheadawson/silverstripe-rateable: client/javascript/rateable.min.js');
+        Requirements::css('sheadawson/silverstripe-rateable: client/css/rateable.min.css');
+
         $templates = $this->owner->stat('rateable_templates');
-        $templates[] = 'RateableUI';
+        $templates[] = 'Includes/RateableUI';
         return $this->owner->renderWith($templates);
     }
 
@@ -203,9 +219,9 @@ class Rateable extends DataExtension
     public function checkRatingsEnabled()
     {
         $enableRatings = ($this->owner->EnableRatings || $this->owner->config()->rateable_config_enabled);
-        return $enableRatings && $this->owner->exists() && $this->owner->ClassName != 'ErrorPage';
+        return $enableRatings && $this->owner->exists() && $this->owner->ClassName != ErrorPage::class;
     }
-    
+
     /**
      * Check whether the user can take back a rating or not.
      *
@@ -221,6 +237,6 @@ class Rateable extends DataExtension
      **/
     public function RatePath()
     {
-        return Controller::join_links(RateableController::URLSegment, 'rate', $this->owner->ClassName, $this->owner->ID);
+        return Controller::join_links(RateableController::URLSegment, 'rate', str_replace('\\', '-', $this->owner->ClassName), $this->owner->ID);
     }
 }

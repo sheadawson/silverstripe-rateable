@@ -1,0 +1,6 @@
+mappings:
+  RateableController: SheaDawson\Rateable\Controllers\RateableController
+  Likeable: SheaDawson\Rateable\Extensions\Likeable
+  Rateable: SheaDawson\Rateable\Extensions\Rateable
+  Rating: SheaDawson\Rateable\Model\Rating
+  RateableService: SheaDawson\Rateable\Services\RateableService
