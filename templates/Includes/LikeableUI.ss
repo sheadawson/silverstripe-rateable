@@ -4,8 +4,8 @@
 			<span class="rateable-ui-button-child rateable-ui-text">
 				<span class="js-rateable-numberofratings">$Up.NumberOfRatings</span>
 			</span>
-			<img src="rateable/images/star-off.png" class="rateable-ui-button-child rateable-ui-image rateable-ui-image-inactive" alt="$Score" title="bad">
-			<img src="rateable/images/star-on.png" class="rateable-ui-button-child rateable-ui-image rateable-ui-image-active" alt="$Score" title="bad">
+			<img src="$ModulePath(sheadawson/silverstripe-rateable)client/images/star-off.png" class="rateable-ui-button-child rateable-ui-image rateable-ui-image-inactive" alt="$Score">
+			<img src="$ModulePath(sheadawson/silverstripe-rateable)client/images/star-on.png" class="rateable-ui-button-child rateable-ui-image rateable-ui-image-active" alt="$Score">
 		</button>
 	<% end_loop %>
 </div>

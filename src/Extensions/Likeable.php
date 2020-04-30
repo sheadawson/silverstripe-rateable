@@ -1,5 +1,7 @@
 <?php
 
+namespace SheaDawson\Rateable\Extensions;
+
 class Likeable extends Rateable
 {
     /**
@@ -15,5 +17,5 @@ class Likeable extends Rateable
     /**
      * {@inheritdoc}
      */
-    private static $rateable_templates = array('LikeableUI');
+    private static $rateable_templates = array('Includes/LikeableUI');
 }

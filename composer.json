@@ -1,7 +1,7 @@
 {
 	"name": "sheadawson/silverstripe-rateable",
 	"description": "An extension that adds a star rating system + UI to any DataObject type.",
-	"type": "silverstripe-module",
+	"type": "silverstripe-vendormodule",
 	"keywords": ["silverstripe", "rating"],
 	"homepage": "http://github.com/sheadawson/silverstripe-rateable",
 	"authors": [
@@ -12,11 +12,17 @@
 	],
 	"require":
 	{
-		"composer/installers": "*",
-		"silverstripe/framework": "~3.1",
-		"silverstripe/cms": "~3.1"
+        "silverstripe/vendor-plugin": "^1",
+		"silverstripe/cms": "^4.1"
 	},
-	"extra": {
-		"installer-name": "rateable"
-	}
+    "autoload": {
+        "psr-4": {
+            "SheaDawson\\Rateable\\": "src/"
+        }
+    },
+    "extra": {
+        "expose": [
+            "client"
+        ]
+    }
 }

@@ -1,4 +1,12 @@
 <?php
+
+namespace SheaDawson\Rateable\Services;
+
+use SheaDawson\Rateable\Model\Rating;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\DataList;
+use SilverStripe\Security\Security;
+
 /**
  * @author Shea Dawson <shea@silverstripe.com.au>
  * @license BSD http://silverstripe.org/BSD-license
@@ -11,7 +19,7 @@ class RateableService
      *
      * @param String $class DataObject ClassName
      * @param Int $id DataObject ID
-     * @return Rating|booleans
+     * @return Rating|boolean
      **/
     public function userGetRating($class, $id)
     {
@@ -21,7 +29,7 @@ class RateableService
             if ($result && $result->exists()) {
                 return $result;
             }
-            if ($memberID = Member::currentUserID()) {
+            if ($memberID = (Security::getCurrentUser() ? Security::getCurrentUser()->ID : false)) {
                 $result = $ratings->find('MemberID', $memberID);
                 if ($result && $result->exists()) {
                     return $result;
@@ -63,7 +71,7 @@ class RateableService
 
 
     /**
-     * takes a DataList of Rateable DataObjects and sorts them by their average score 
+     * takes a DataList of Rateable DataObjects and sorts them by their average score
      * @param DataList $list
      * @return ArrayList
      **/

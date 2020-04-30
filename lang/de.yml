@@ -1,14 +1,12 @@
 de:
-  RateableController:
+  SheaDawson\Rateable\Controllers\RateableController:
     ERRORALREADYRATED: 'Entschuldigung, Sie haben das schon bewertet'
     ERRORMESSAGE: 'Entschuldigung, beim Bewerten trat ein Fehler auf'
     ERRORNOTFOUNT: 'Entschuldigung, das Objekt zum Bewerten wurde nicht gefunden'
     THANKYOUMESSAGE: 'Danke f&uuml;r die Bewertung!'
-  RateableJS:
-    ERRORALREADYRATED: 'Entschuldigung, Sie haben das schon bewertet'
-  Rateable:
+  SheaDawson\Rateable\Extensions\Rateable:
     db_EnableRatings: 'Bewertung (Sterne) anzeigen'
-  Rating:
+  SheaDawson\Rateable\Model\Rating:
     PLURALNAME: Bewertungen
     SINGULARNAME: Bewertung
     db_ObjectClass: 'Objekt Class'

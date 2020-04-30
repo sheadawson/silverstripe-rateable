@@ -1,17 +1,24 @@
 <?php
+
+namespace SheaDawson\Rateable\Controllers;
+
+use SheaDawson\Rateable\Model\Rating;
+use SheaDawson\Rateable\Services\RateableService;
+use SilverStripe\Control\Controller;
+
 /**
  * @author Shea Dawson <shea@silverstripe.com.au>
  * @license BSD http://silverstripe.org/BSD-license
  */
 class RateableController extends Controller
 {
-    
+
     const URLSegment = 'rateable';
 
     private static $dependencies = array(
         'rateableService'    => '%$RateableService',
     );
-    
+
     private static $allowed_actions = array(
         'rate'
     );
@@ -24,17 +31,17 @@ class RateableController extends Controller
 
     /**
      * action for rating an object
-     * @return JSON
+     * @return String JSON
      **/
     public function rate($request)
     {
-        $class    = $request->param('ObjectClassName');
-        $id    = (int)$request->param('ObjectID');
-        $score    = (int)$request->getVar('score');
+        $class  = str_ireplace('-', '\\', $request->param('ObjectClassName'));
+        $id     = (int)$request->param('ObjectID');
+        $score  = (int)$request->getVar('score');
 
         // check we have all the params
         if (!class_exists($class) || !$id || !$score || (!$object = $class::get()->byID($id))) {
-            return Convert::raw2json(array(
+            return json_encode(array(
                 'status' => 'error',
                 'message' => _t('RateableController.ERRORMESSAGE', 'Sorry, there was an error rating this item')
             ));
@@ -42,7 +49,7 @@ class RateableController extends Controller
 
         // check the object exists
         if (!$object || !$object->checkRatingsEnabled()) {
-            return Convert::raw2json(array(
+            return json_encode(array(
                 'status' => 'error',
                 'message' => _t('RateableController.ERRORNOTFOUNT', 'Sorry, the item you are trying to rate could not be found')
             ));
@@ -52,7 +59,7 @@ class RateableController extends Controller
         $ratingRecord = $this->rateableService->userGetRating($class, $id);
         if ($ratingRecord) {
             if (!$object->canChangeRating()) {
-                return Convert::raw2json(array(
+                return json_encode(array(
                     'status' => 'error',
                     'message' => _t('RateableController.ERRORALREADYRATED', 'Sorry, You have already rated this item')
                 ));
@@ -65,7 +72,7 @@ class RateableController extends Controller
                 $ratingRecord->delete();
 
                 // Success
-                return Convert::raw2json(array(
+                return json_encode(array(
                     'status' => 'success',
                     'isremovingrating' => 1,
                     'averagescore' => $object->getAverageScore(),
@@ -84,7 +91,7 @@ class RateableController extends Controller
             }
         }
         if (!$isScoreValid) {
-            return Convert::raw2json(array(
+            return json_encode(array(
                 'status' => 'error',
                 'message' => _t('RateableController.ERRORINVALIDRATING', 'You sent an invalid rating.')
             ));
@@ -102,7 +109,7 @@ class RateableController extends Controller
         $ratingRecord->write();
 
         // success
-        return Convert::raw2json(array(
+        return json_encode(array(
             'status' => 'success',
             'isnew'  => $isRatingNew,
             'averagescore' => $object->getAverageScore(),

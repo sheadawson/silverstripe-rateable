@@ -1,0 +1,9 @@
+---
+Name: rateable-routes
+After:
+  - '#rootroutes'
+  - '#coreroutes'
+---
+SilverStripe\Control\Director:
+  rules:
+    'rateable//$Action/$ObjectClassName/$ObjectID/$Rating': SheaDawson\Rateable\Controllers\RateableController

@@ -5,19 +5,19 @@ An extension that adds a star rating system + UI to any DataObject type
 
 ## Requirements
 
-Silverstripe 3.1
+Silverstripe 4
 
 ## Installation
 
 ``
-composer require sheadawson/silverstripe-rateable 1.1.x@stable
+composer require sheadawson/silverstripe-rateable 2.0.x@stable
 ``
 
 Apply the Rateable DataExtension to the Objects you want to rate. ie. in mysite/_config/config.yml
 
 	Page:
 	  extensions:
-	    - Rateable
+	    - SheaDawson\Rateable\Extensions\Rateable
 
 Then in your templates you can use $RateableUI, when in the context of your rateable object to render the star rating UI. If you have multiple instances of the same DataObject + RateableUI on one page, you can pass in a unique identifier string to $RateableUI, ie. $RateableUI('footer').
 
