@@ -11,11 +11,11 @@
 	
 	ready(function() {
 		var rateable = document.querySelector('.rateable-ui');
-		var ratingButtons = rateable.querySelectorAll('button');
-		
 		if (typeof(rateable) == 'undefined' || rateable == null) {
 			return;
 		}
+
+		var ratingButtons = rateable.querySelectorAll('button');
 		
 		function alertMessageIfNotDisabled(message) {
 			if (message && rateable.getAttribute('data-disablealert') == 0) {
